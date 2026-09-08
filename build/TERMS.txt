@@ -1,0 +1,32 @@
+505TH HUB - TERMS OF SERVICE
+Version 1.0 | 7 September 2026
+
+Copyright (c) 2026 505th Aux Mod Team - RevGamer (S.Davy)
+
+1. YOUR AGREEMENT
+Read these terms before installing 505th Hub. Select the acceptance checkbox to continue. If you do not agree, cancel setup. Keep a copy of these terms in the application's installation folder.
+
+2. COMMUNITY USE
+505th Hub is a community application for the 505th Expeditionary Force. You may install and use an authorised copy for your participation in the unit. Access to connected member features requires an approved website account. Installing the app does not grant a rank, staff permission or unit membership.
+
+3. YOUR ACCOUNT AND CONDUCT
+Use your own account and keep its credentials private. Do not impersonate members, bypass access controls, falsify attendance or service records, harass others, disrupt the service, or access or disclose another member's private information without permission. Report suspected account or security problems to the team through the unit's established support channels.
+
+4. OWNERSHIP
+Original 505th Hub code, branding and content are credited to 505th Aux Mod Team - RevGamer (S.Davy). Do not sell the app or present a modified build as an official team release without permission. Third-party software, artwork and trademarks remain subject to their respective owners' rights and licences. These terms do not override open-source licences or rights granted by law.
+
+5. CONNECTED DATA AND NOTIFICATIONS
+This build uses Google Firebase Authentication for website account sign-in and Firestore to retrieve your member record and notification inbox. Marking a notification as read updates that notification on the server. Signing out clears the displayed member data and stops the app's listeners. The login session is kept in memory until you quit; closing the window normally keeps the app running in the Windows tray.
+Notifications may display member-related text on your screen. Consider who can see your screen. Internet access and an available backend are needed for live updates. This build does not provide guaranteed delivery, automatic event reminders or completed Cortana attendance integration.
+Uninstalling the app does not delete your website account or server records. Contact the unit team through https://www.505expeditionaryforce.com/ for account and data requests.
+
+6. AVAILABILITY AND ACCESS
+This is a development release. Features may be incomplete and service interruptions may occur. Check important event details through the unit's established channels. Access may be restricted where membership ends or account misuse needs investigation. Contact the team if you believe an access restriction is mistaken. Future releases may present revised terms for your review.
+
+7. YOUR RIGHTS
+Nothing in these terms removes rights or remedies that cannot lawfully be excluded. These terms do not claim ownership of your personal information. You may stop using the app and uninstall it through Windows Settings at any time.
+
+8. CONTACT
+505th Aux Mod Team - RevGamer (S.Davy)
+Website: https://www.505expeditionaryforce.com/
+Use the unit's existing support or command channels for assistance.

@@ -1,0 +1,21 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'); const sourceDir=fs.existsSync(__dirname+'/live.js')?__dirname:require('node:path').dirname(__dirname);
+let factory;const sandbox={};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(sourceDir+'/notification-feed.js','utf8').replace('export function','function')+'\nthis.factory=createNotificationFeed;',sandbox);factory=sandbox.factory;
+const alerts=[];const receive=factory(items=>alerts.push(items));
+const snap=(ids,fromCache=false)=>({metadata:{fromCache},docs:ids.map(([id,read=false])=>({id,data:()=>({title:id,read})}))});
+receive(snap([['old']] ,true));receive(snap([['old']]));assert.equal(alerts.length,0);
+receive(snap([['new'],['old']]));assert.equal(alerts.length,1);assert.equal(alerts[0][0].id,'new');
+receive(snap([['new'],['old']]));receive(snap([['new',true],['old']]));assert.equal(alerts.length,1);
+receive(snap([['offline'],['new']],true));assert.equal(alerts.length,1);
+receive(snap([['offline'],['new']]));assert.equal(alerts.length,2);
+receive(snap([['read-elsewhere',true],['offline']]));assert.equal(alerts.length,2);
+const fresh=[];factory(x=>fresh.push(x))(snap([['different-account']]));assert.equal(fresh.length,0);
+console.log('PASS: history silent, new unread alerts, duplicate prevention, read changes silent, cache/reconnect, separate account baseline.');
+const elements={};for(const key of ['#content','#connection','#logout','#breadcrumb','#toast'])elements[key]={textContent:'',innerHTML:'',hidden:false};
+let authCallback,profileCallback,profileError,inboxCallback,signouts=0,cleanups=0,cleared=0;const auth={currentUser:null};
+const context={createNotificationFeed:factory,initializeApp:()=>({}),getAuth:()=>auth,getFirestore:()=>({}),setPersistence:()=>Promise.resolve(),inMemoryPersistence:{},onAuthStateChanged:(_a,cb)=>authCallback=cb,doc:(_db,...parts)=>parts.join('/'),collection:(_db,...parts)=>{assert.equal(parts.join('/'),`notifications/${auth.currentUser.uid}/items`);return 'inbox';},query:x=>x,orderBy:()=>{},limit:()=>{},updateDoc:()=>Promise.resolve(),onSnapshot:(path,_opts,cb,error)=>{if(path==='inbox')inboxCallback=cb;else{assert.equal(path,`users/${auth.currentUser.uid}`);profileCallback=cb;profileError=error;}return ()=>cleanups++;},signOut:()=>{signouts++;auth.currentUser=null;authCallback(null);return Promise.resolve();},signInWithEmailAndPassword:()=>Promise.resolve(),document:{querySelector:s=>elements[s],querySelectorAll:()=>[],addEventListener:()=>{}},window:{addEventListener:()=>{},hubDesktop:{clearNotifications:()=>cleared++,showNotification:()=>Promise.resolve()}},console,Date};
+vm.createContext(context);vm.runInContext(fs.readFileSync(sourceDir+'/live.js','utf8').replace(/^import .*;\r?\n/gm,''),context);
+authCallback(null);auth.currentUser={uid:'a'};authCallback(auth.currentUser);profileCallback({data:()=>({status:'active',firstName:'<img>',rank:'Pvt'}),metadata:{fromCache:false}});assert(elements['#content'].innerHTML.includes('&lt;img&gt;'));assert(inboxCallback);
+const stale=inboxCallback;profileError();assert(elements['#content'].innerHTML.includes('id="login"'));assert(cleanups>0);stale(snap([['late']]));assert(elements['#content'].innerHTML.includes('id="login"'));
+profileCallback({data:()=>({status:'pending'}),metadata:{fromCache:false}});assert.equal(signouts,1);assert(cleared>0);
+console.log('PASS: UID-scoped inbox, escaped content, error cleanup, late callback guard, unapproved account signout.');
+

@@ -1,0 +1,2 @@
+const {contextBridge,ipcRenderer}=require('electron');
+contextBridge.exposeInMainWorld('hubDesktop',{showNotification:payload=>ipcRenderer.invoke('notification:live',payload),clearNotifications:()=>ipcRenderer.invoke('notification:clear'),onNotifications:callback=>ipcRenderer.on('hub:notifications',()=>callback()),testNotification:()=>ipcRenderer.invoke('notification:demo'),onOperations:callback=>ipcRenderer.on('hub:operations',()=>callback()),setUnreadCount:count=>ipcRenderer.send('notification:unread-count',count)});

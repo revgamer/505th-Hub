@@ -1,0 +1,83 @@
+{
+  "name": "505th-hub",
+  "version": "0.2.1",
+  "private": true,
+  "description": "505th Expeditionary Force member hub for Windows",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "npm run build && electron .",
+    "check": "node --check main.cjs && node --check preload.cjs && node --check app.js",
+    "build": "esbuild live.js --bundle --outfile=live.bundle.js --platform=browser --format=iife",
+    "pack:win": "npm run build && electron-builder --win dir",
+    "installer:win": "npm run build && electron-builder --win nsis --x64 --config.directories.output=dist-installer",
+    "release:win": "npm run build && electron-builder --win nsis --x64 --publish always"
+  },
+  "devDependencies": {
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9",
+    "firebase": "^12.18.0"
+  },
+  "build": {
+    "appId": "com.505th.hub",
+    "productName": "505th Hub",
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "alert-preload.cjs",
+      "live.html",
+      "live.bundle.js",
+      "style.css",
+      "alert.html",
+      "alert.css",
+      "alert.js",
+      "assets/logo.png",
+      "assets/badge.png"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "signAndEditExecutable": true,
+      "signExecutable": false,
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "505th Hub",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "license": "build/TERMS.txt",
+      "include": "build/installer.nsh",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "uninstallDisplayName": "505th Hub",
+      "artifactName": "505th-Hub-Setup-${version}-${arch}.${ext}"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "RevGamer",
+      "repo": "505th-hub"
+    },
+    "copyright": "Copyright © 2026 505th Aux Mod Team - RevGamer (S.Davy)",
+    "extraFiles": [
+      {
+        "from": "build/TERMS.txt",
+        "to": "TERMS.txt"
+      }
+    ]
+  },
+  "author": {
+    "name": "505th Aux Mod Team - RevGamer (S.Davy)"
+  },
+  "license": "LicenseRef-505th-Hub-Terms"
+}
