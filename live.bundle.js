@@ -31225,6 +31225,7 @@ This typically indicates that your device does not have a healthy Internet conne
     inbox = [];
     inboxStatus = "Waiting for member login";
     void window.hubDesktop?.clearNotifications?.();
+    void window.hubDesktop?.setUnreadCount?.(0);
   }
   function connectInbox(uid) {
     if (inboxUid === uid) return;
@@ -31240,6 +31241,7 @@ This typically indicates that your device does not have a healthy Internet conne
       if (auth.currentUser?.uid !== uid || !profile) return;
       inbox = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
       inboxStatus = snapshot.metadata.fromCache ? "Cached inbox \xB7 waiting for connection" : "Live inbox connected";
+      void window.hubDesktop?.setUnreadCount?.(inbox.filter((n2) => !n2.read).length);
       receive(snapshot);
       if (page === "notifications") render();
     }, () => {
