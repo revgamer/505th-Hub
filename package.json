@@ -66,7 +66,8 @@
     "publish": {
       "provider": "github",
       "owner": "RevGamer",
-      "repo": "505th-Hub"
+      "repo": "505th-Hub",
+      "releaseType": "release"
     },
     "copyright": "Copyright © 2026 505th Aux Mod Team - RevGamer (S.Davy)",
     "extraFiles": [
